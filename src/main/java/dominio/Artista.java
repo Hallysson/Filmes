@@ -14,21 +14,19 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="tblArtista")
-public class Artista implements Serializable{
-
+@Table(name = "tblArtista")
+public class Artista implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
 
 	private Integer idArtista;
 	private String nome;
 	private String nacionalidade;
 	private BigDecimal cache;
 	private Date nascimento;
-	
+
 	private List<Participacao> participacoes;
-	
-	public Artista(){
+
+	public Artista() {
 		participacoes = new ArrayList<>();
 	}
 
@@ -43,7 +41,7 @@ public class Artista implements Serializable{
 	}
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Integer getIdArtista() {
 		return idArtista;
 	}
@@ -84,7 +82,7 @@ public class Artista implements Serializable{
 		this.nascimento = nascimento;
 	}
 
-	@OneToMany(mappedBy="artista")
+	@OneToMany(mappedBy = "artista")
 	public List<Participacao> getParticipacoes() {
 		return participacoes;
 	}
@@ -92,13 +90,13 @@ public class Artista implements Serializable{
 	public void setParticipacoes(List<Participacao> participacoes) {
 		this.participacoes = participacoes;
 	}
-	
+
 	public void addParticipacao(Participacao participacao) {
-		//Associação de mão dupla
+		// Associação de mão dupla
 		this.participacoes.add(participacao);
 		participacao.setArtista(this);
 	}
-	
+
 	public void removeParticipacao(Participacao participacao) {
 		this.participacoes.remove(participacao);
 	}
@@ -133,6 +131,4 @@ public class Artista implements Serializable{
 			return false;
 		return true;
 	}
-	
-	
 }

@@ -13,19 +13,18 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="tblFilme")
-public class Filme implements Serializable{
-
+@Table(name = "tblFilme")
+public class Filme implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	private Integer idFilme;
 	private String titulo;
 	private Integer duracao;
 	private Integer ano;
-	
+
 	private List<Participacao> participacoes;
-	
-	public Filme(){
+
+	public Filme() {
 		participacoes = new ArrayList<>();
 	}
 
@@ -39,7 +38,7 @@ public class Filme implements Serializable{
 	}
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Integer getIdFilme() {
 		return idFilme;
 	}
@@ -72,7 +71,7 @@ public class Filme implements Serializable{
 		this.ano = ano;
 	}
 
-	@OneToMany(mappedBy="filme")
+	@OneToMany(mappedBy = "filme")
 	public List<Participacao> getParticipacoes() {
 		return participacoes;
 	}
@@ -82,11 +81,11 @@ public class Filme implements Serializable{
 	}
 
 	public void addParticipacao(Participacao participacao) {
-		//Associação de mão dupla
+		// Associação de mão dupla
 		this.participacoes.add(participacao);
 		participacao.setFilme(this);
 	}
-	
+
 	public void removeParticipacao(Participacao participacao) {
 		this.participacoes.remove(participacao);
 	}
@@ -120,10 +119,10 @@ public class Filme implements Serializable{
 			return false;
 		return true;
 	}
-	
-	public BigDecimal cacheTotal(){
+
+	public BigDecimal cacheTotal() {
 		BigDecimal soma = new BigDecimal("0.00");
-		for(Participacao p:participacoes){
+		for (Participacao p : participacoes) {
 			soma = soma.add(p.cachePago());
 		}
 		return soma;

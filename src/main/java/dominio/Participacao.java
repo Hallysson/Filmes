@@ -12,20 +12,19 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="tblParticipacao")
-public class Participacao implements Serializable{
-
+@Table(name = "tblParticipacao")
+public class Participacao implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	private Integer idParticipacao;
 	private String personagem;
 	private BigDecimal desconto;
-	
+
 	private Filme filme;
 	private Artista artista;
-	
-	public Participacao(){
-		
+
+	public Participacao() {
+
 	}
 
 	public Participacao(Integer idParticipacao, String personagem, BigDecimal desconto, Filme filmes, Artista artista) {
@@ -40,7 +39,7 @@ public class Participacao implements Serializable{
 	}
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Integer getIdParticipacao() {
 		return idParticipacao;
 	}
@@ -115,8 +114,8 @@ public class Participacao implements Serializable{
 			return false;
 		return true;
 	}
-	
-	public BigDecimal cachePago(){
+
+	public BigDecimal cachePago() {
 		return artista.getCache().subtract(desconto);
 	}
 }
