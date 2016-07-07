@@ -17,6 +17,7 @@ import dominio.Participacao;
 import servico.ArtistaServico;
 import servico.FilmeServico;
 import servico.ParticipacaoServico;
+import servico.ServicoException;
 
 @WebServlet("/Instanciacao")
 public class Instanciacao extends HttpServlet {
@@ -32,10 +33,8 @@ public class Instanciacao extends HttpServlet {
 			Filme f1 = new Filme(null, "O Aviador", 170, 2005);
 			Filme f2 = new Filme(null, "Titanic", 195, 1997);
 
-			Artista a1 = new Artista(null, "Leonardo Di Caprio", "EUA", new BigDecimal("10000000.00"),
-					sdf.parse("11/11/1974"));
-			Artista a2 = new Artista(null, "Cate Blanchett", "Austrália", new BigDecimal("5000000.00"),
-					sdf.parse("14/05/1969"));
+			Artista a1 = new Artista(null, "Leonardo Di Caprio", "EUA", new BigDecimal("10000000.00"), sdf.parse("11/11/1974"));
+			Artista a2 = new Artista(null, "Cate Blanchett", "Austrália", new BigDecimal("5000000.00"), sdf.parse("14/05/1969"));
 			Artista a3 = new Artista(null, "Kate Winslet", "UK", new BigDecimal("8000000.00"), sdf.parse("05/10/1975"));
 
 			Participacao p1 = new Participacao(null, "Jack Dawson", new BigDecimal("2000000.00"), f2, a1);
@@ -64,6 +63,8 @@ public class Instanciacao extends HttpServlet {
 		} catch (ParseException e) {
 			// Apresenta o erro abaixo caso a data não seja válida
 			response.getWriter().append("Erro ao instanciar data. Instância não criada!");
+		} catch(ServicoException e) {
+			response.getWriter().append("Erro! " + e.getMessage());
 		}
 	}
 }

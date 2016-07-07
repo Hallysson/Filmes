@@ -38,8 +38,26 @@ public class ArtistaDaoImpl implements ArtistaDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Artista> buscarTodos() {
-		String jpql = "SELECT x FROM Artista x";
+		String jpql = "SELECT x FROM Artista";
 		Query query = em.createQuery(jpql);
 		return query.getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Artista> buscarTodosOrdenadosPorNome() {
+		String sql = "SELECT x FROM Artista x ORDER BY x.nome";
+		Query query = em.createQuery(sql);
+		return query.getResultList();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Artista buscarNomeExato(String nome) {
+		String sql = "SELECT x FROM Artista x WHERE x.nome = :p1";
+		Query query = em.createQuery(sql);
+		query.setParameter("p1", nome);
+		List<Artista> aux = query.getResultList();
+ 		return (aux.size() > 0) ? aux.get(0) : null;
 	}
 }
