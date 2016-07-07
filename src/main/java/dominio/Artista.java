@@ -14,25 +14,28 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tblArtista")
+@Table(name="tb_artista")
 public class Artista implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	private Integer idArtista;
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Integer codArtista;
 	private String nome;
 	private String nacionalidade;
 	private BigDecimal cache;
 	private Date nascimento;
-
+	
+	@OneToMany(mappedBy="artista")
 	private List<Participacao> participacoes;
-
+	
 	public Artista() {
 		participacoes = new ArrayList<>();
 	}
 
-	public Artista(Integer idArtista, String nome, String nacionalidade, BigDecimal cache, Date nascimento) {
+	public Artista(Integer codArtista, String nome, String nacionalidade, BigDecimal cache, Date nascimento) {
 		super();
-		this.idArtista = idArtista;
+		this.codArtista = codArtista;
 		this.nome = nome;
 		this.nacionalidade = nacionalidade;
 		this.cache = cache;
@@ -40,14 +43,12 @@ public class Artista implements Serializable {
 		participacoes = new ArrayList<>();
 	}
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	public Integer getIdArtista() {
-		return idArtista;
+	public Integer getCodArtista() {
+		return codArtista;
 	}
 
-	public void setIdArtista(Integer idArtista) {
-		this.idArtista = idArtista;
+	public void setCodArtista(Integer codArtista) {
+		this.codArtista = codArtista;
 	}
 
 	public String getNome() {
@@ -82,7 +83,6 @@ public class Artista implements Serializable {
 		this.nascimento = nascimento;
 	}
 
-	@OneToMany(mappedBy = "artista")
 	public List<Participacao> getParticipacoes() {
 		return participacoes;
 	}
@@ -90,20 +90,19 @@ public class Artista implements Serializable {
 	public void setParticipacoes(List<Participacao> participacoes) {
 		this.participacoes = participacoes;
 	}
-
-	public void addParticipacao(Participacao participacao) {
-		// Associação de mão dupla
-		this.participacoes.add(participacao);
-		participacao.setArtista(this);
+	
+	public void addParticipacao(Participacao x) {
+		this.participacoes.add(x);
+		x.setArtista(this);
 	}
 
-	public void removeParticipacao(Participacao participacao) {
-		this.participacoes.remove(participacao);
+	public void removeParticipacao(Participacao x) {
+		this.participacoes.remove(x);
 	}
 
 	@Override
 	public String toString() {
-		return "Artista [idArtista=" + idArtista + ", nome=" + nome + ", nacionalidade=" + nacionalidade + ", cache="
+		return "Artista [codArtista=" + codArtista + ", nome=" + nome + ", nacionalidade=" + nacionalidade + ", cache="
 				+ cache + ", nascimento=" + nascimento + "]";
 	}
 
@@ -111,7 +110,7 @@ public class Artista implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((idArtista == null) ? 0 : idArtista.hashCode());
+		result = prime * result + ((codArtista == null) ? 0 : codArtista.hashCode());
 		return result;
 	}
 
@@ -124,11 +123,14 @@ public class Artista implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Artista other = (Artista) obj;
-		if (idArtista == null) {
-			if (other.idArtista != null)
+		if (codArtista == null) {
+			if (other.codArtista != null)
 				return false;
-		} else if (!idArtista.equals(other.idArtista))
+		} else if (!codArtista.equals(other.codArtista))
 			return false;
 		return true;
 	}
+	
+	
+	
 }

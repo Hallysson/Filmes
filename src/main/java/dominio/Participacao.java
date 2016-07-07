@@ -12,40 +12,44 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tblParticipacao")
+@Table(name="tb_participacao")
 public class Participacao implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	private Integer idParticipacao;
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Integer codParticipacao;
 	private String personagem;
 	private BigDecimal desconto;
-
+	
+	@ManyToOne
+	@JoinColumn(name="filme")
 	private Filme filme;
+	
+	@ManyToOne
+	@JoinColumn(name="artista")
 	private Artista artista;
-
+	
 	public Participacao() {
-
 	}
 
-	public Participacao(Integer idParticipacao, String personagem, BigDecimal desconto, Filme filmes, Artista artista) {
+	public Participacao(Integer codParticipacao, String personagem, BigDecimal desconto, Filme filme, Artista artista) {
 		super();
-		this.idParticipacao = idParticipacao;
+		this.codParticipacao = codParticipacao;
 		this.personagem = personagem;
 		this.desconto = desconto;
-		this.filme = filmes;
+		this.filme = filme;
 		filme.addParticipacao(this);
 		this.artista = artista;
 		artista.addParticipacao(this);
 	}
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	public Integer getIdParticipacao() {
-		return idParticipacao;
+	public Integer getCodParticipacao() {
+		return codParticipacao;
 	}
 
-	public void setIdParticipacao(Integer idParticipacao) {
-		this.idParticipacao = idParticipacao;
+	public void setCodParticipacao(Integer codParticipacao) {
+		this.codParticipacao = codParticipacao;
 	}
 
 	public String getPersonagem() {
@@ -64,8 +68,6 @@ public class Participacao implements Serializable {
 		this.desconto = desconto;
 	}
 
-	@ManyToOne
-	@JoinColumn(name = "filme")
 	public Filme getFilme() {
 		return filme;
 	}
@@ -74,8 +76,6 @@ public class Participacao implements Serializable {
 		this.filme = filme;
 	}
 
-	@ManyToOne
-	@JoinColumn(name = "artista")
 	public Artista getArtista() {
 		return artista;
 	}
@@ -86,7 +86,7 @@ public class Participacao implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Participacao [idParticipacao=" + idParticipacao + ", personagem=" + personagem + ", desconto="
+		return "Participacao [codParticipacao=" + codParticipacao + ", personagem=" + personagem + ", desconto="
 				+ desconto + "]";
 	}
 
@@ -94,7 +94,7 @@ public class Participacao implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((idParticipacao == null) ? 0 : idParticipacao.hashCode());
+		result = prime * result + ((codParticipacao == null) ? 0 : codParticipacao.hashCode());
 		return result;
 	}
 
@@ -107,15 +107,16 @@ public class Participacao implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Participacao other = (Participacao) obj;
-		if (idParticipacao == null) {
-			if (other.idParticipacao != null)
+		if (codParticipacao == null) {
+			if (other.codParticipacao != null)
 				return false;
-		} else if (!idParticipacao.equals(other.idParticipacao))
+		} else if (!codParticipacao.equals(other.codParticipacao))
 			return false;
 		return true;
 	}
-
-	public BigDecimal cachePago() {
+	
+	public BigDecimal getCachePago() {
 		return artista.getCache().subtract(desconto);
 	}
+	
 }

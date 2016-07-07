@@ -18,7 +18,7 @@ public class FilmeDaoImpl implements FilmeDao {
 	
 	@Override
 	public void inserirAtualizar(Filme x) {
-		if (x.getIdFilme() != null) {
+		if (x.getCodFilme() != null) {
 			x = em.merge(x);
 		}
 		em.persist(x);
@@ -31,8 +31,8 @@ public class FilmeDaoImpl implements FilmeDao {
 	}
 
 	@Override
-	public Filme buscar(int id) {
-		return em.find(Filme.class, id);
+	public Filme buscar(int cod) {
+		return em.find(Filme.class, cod);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -42,4 +42,16 @@ public class FilmeDaoImpl implements FilmeDao {
 		Query query = em.createQuery(jpql);
 		return query.getResultList();
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Filme> buscarPorNomeAno(String nome, int anoMin, int anoMax) {
+		String jpql = "SELECT x FROM Filme x WHERE x.titulo LIKE :p1 AND x.ano >= :p2 AND x.ano <= :p3 ORDER BY x.titulo";
+		Query query = em.createQuery(jpql);
+		query.setParameter("p1", "%"+nome+"%");
+		query.setParameter("p2", anoMin);
+		query.setParameter("p3", anoMax);
+		return query.getResultList();
+	}
+	
 }

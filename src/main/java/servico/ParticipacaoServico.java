@@ -1,5 +1,6 @@
 package servico;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import dao.DaoFactory;
@@ -14,38 +15,84 @@ public class ParticipacaoServico {
 	public ParticipacaoServico() {
 		dao = DaoFactory.criarParticipacaoDao();
 	}
-	
-	
-	public void inserirAtualizar(Participacao x){
-		try{
+
+	public void validar(Participacao x) throws ValidacaoException {
+		List<String> erros = new ArrayList<>();
+		
+		if (x.getPersonagem()==null) {
+			erros.add("Favor preencher o campo personagem");
+		}
+		if (x.getArtista()==null) {
+			erros.add("Favor informar um artista");
+		}
+		if (x.getFilme()==null) {
+			erros.add("Favor informar um filme");
+		}
+		if (x.getDesconto()==null) {
+			erros.add("Favor preencher um valor v�lido para o desconto");
+		}
+		
+		if (!erros.isEmpty()) {
+			throw new ValidacaoException("Erro de valida��o", erros);
+		}
+	}
+
+	public void inserir(Participacao x) throws ServicoException {
+		Participacao aux = dao.buscarExato(x.getPersonagem(), x.getArtista(), x.getFilme());
+		if (aux != null) {
+			throw new ServicoException("J� existe esse mesmo personagem cadastrado para o"+
+				" artista " + x.getArtista().getNome() + " no filme " + x.getFilme().getTitulo(), 1);
+		}
+		
+		try {
 			Transaction.begin();
 			dao.inserirAtualizar(x);
 			Transaction.commit();
 		}
-		catch(RuntimeException e){
-			if(Transaction.isActive()){
+		catch (RuntimeException e) {
+			if (Transaction.isActive()) {
 				Transaction.rollback();
 			}
 			System.out.println("Erro: " + e.getMessage());
 		}
 	}
 
-	public void excluir(Participacao x){
-		try{
+	public void atualizar(Participacao x) throws ServicoException {
+		Participacao aux = dao.buscarExatoDiferente(x.getCodParticipacao(), x.getPersonagem(), x.getArtista(), x.getFilme());
+		if (aux != null) {
+			throw new ServicoException("J� existe esse mesmo personagem cadastrado para o"+
+				" artista " + x.getArtista().getNome() + " no filme " + x.getFilme().getTitulo(), 1);
+		}
+		
+		try {
 			Transaction.begin();
-			dao.excluir(x);
+			dao.inserirAtualizar(x);
 			Transaction.commit();
 		}
-		catch(RuntimeException e){
-			if(Transaction.isActive()){
+		catch (RuntimeException e) {
+			if (Transaction.isActive()) {
 				Transaction.rollback();
 			}
 			System.out.println("Erro: " + e.getMessage());
 		}
 	}
 	
-	public Participacao buscar(int id) {
-		return dao.buscar(id);
+	public void excluir(Participacao x) {
+		try {
+			Transaction.begin();
+			dao.excluir(x);
+			Transaction.commit();
+		}
+		catch (RuntimeException e) {
+			if (Transaction.isActive()) {
+				Transaction.rollback();
+			}
+			System.out.println("Erro: " + e.getMessage());
+		}
+	}
+	
+	public Participacao buscar(int cod) {
+		return dao.buscar(cod);
 	}
 	
 	public List<Participacao> buscarTodos() {

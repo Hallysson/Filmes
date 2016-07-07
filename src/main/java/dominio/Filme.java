@@ -13,38 +13,39 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tblFilme")
+@Table(name="tb_filme")
 public class Filme implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	private Integer idFilme;
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Integer codFilme;
 	private String titulo;
 	private Integer duracao;
 	private Integer ano;
-
+	
+	@OneToMany(mappedBy="filme")
 	private List<Participacao> participacoes;
 
 	public Filme() {
 		participacoes = new ArrayList<>();
 	}
 
-	public Filme(Integer idFilme, String titulo, Integer duracao, Integer ano) {
+	public Filme(Integer codFilme, String titulo, Integer duracao, Integer ano) {
 		super();
-		this.idFilme = idFilme;
+		this.codFilme = codFilme;
 		this.titulo = titulo;
 		this.duracao = duracao;
 		this.ano = ano;
 		participacoes = new ArrayList<>();
 	}
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	public Integer getIdFilme() {
-		return idFilme;
+	public Integer getCodFilme() {
+		return codFilme;
 	}
 
-	public void setIdFilme(Integer idFilme) {
-		this.idFilme = idFilme;
+	public void setCodFilme(Integer codFilme) {
+		this.codFilme = codFilme;
 	}
 
 	public String getTitulo() {
@@ -71,7 +72,6 @@ public class Filme implements Serializable {
 		this.ano = ano;
 	}
 
-	@OneToMany(mappedBy = "filme")
 	public List<Participacao> getParticipacoes() {
 		return participacoes;
 	}
@@ -79,27 +79,26 @@ public class Filme implements Serializable {
 	public void setParticipacoes(List<Participacao> participacoes) {
 		this.participacoes = participacoes;
 	}
-
-	public void addParticipacao(Participacao participacao) {
-		// Associação de mão dupla
-		this.participacoes.add(participacao);
-		participacao.setFilme(this);
+	
+	public void addParticipacao(Participacao x) {
+		this.participacoes.add(x);
+		x.setFilme(this);
 	}
 
-	public void removeParticipacao(Participacao participacao) {
-		this.participacoes.remove(participacao);
+	public void removeParticipacao(Participacao x) {
+		this.participacoes.remove(x);
 	}
 
 	@Override
 	public String toString() {
-		return "Filme [idFilme=" + idFilme + ", titulo=" + titulo + ", duracao=" + duracao + ", ano=" + ano + "]";
+		return "Filme [codFilme=" + codFilme + ", titulo=" + titulo + ", duracao=" + duracao + ", ano=" + ano + "]";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((idFilme == null) ? 0 : idFilme.hashCode());
+		result = prime * result + ((codFilme == null) ? 0 : codFilme.hashCode());
 		return result;
 	}
 
@@ -112,19 +111,20 @@ public class Filme implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Filme other = (Filme) obj;
-		if (idFilme == null) {
-			if (other.idFilme != null)
+		if (codFilme == null) {
+			if (other.codFilme != null)
 				return false;
-		} else if (!idFilme.equals(other.idFilme))
+		} else if (!codFilme.equals(other.codFilme))
 			return false;
 		return true;
 	}
 
-	public BigDecimal cacheTotal() {
+	public BigDecimal getCacheTotal() {
 		BigDecimal soma = new BigDecimal("0.00");
 		for (Participacao p : participacoes) {
-			soma = soma.add(p.cachePago());
+			soma = soma.add(p.getCachePago());
 		}
 		return soma;
 	}
+	
 }
