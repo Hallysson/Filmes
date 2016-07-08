@@ -20,6 +20,7 @@ import servico.FilmeServico;
 import servico.ParticipacaoServico;
 import servico.ServicoException;
 
+@SuppressWarnings("unused")
 @WebServlet("/ServletTeste")
 public class ServletTeste extends HttpServlet {
 	private static final long serialVersionUID = 1L;

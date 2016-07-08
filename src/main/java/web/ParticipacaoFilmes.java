@@ -1,4 +1,4 @@
-package instanciacao;
+package web;
 
 import java.io.IOException;
 import java.util.List;
@@ -9,20 +9,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dominio.Artista;
-import servico.ArtistaServico;
+import dominio.Filme;
+import servico.FilmeServico;
 
-@WebServlet("/artista/filtrar")
-public class ArtistaFiltrar extends HttpServlet {
+@WebServlet("/participacao/filmes")
+public class ParticipacaoFilmes extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private static String DESTINO = "/artista/listar.jsp";
+	private static String DESTINO = "/participacao/listarFilmes.jsp";
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		ArtistaServico as = new ArtistaServico();
-		String nome = request.getParameter("busca");
-		List<Artista> itens = as.buscarPorNome(nome);
+
+		FilmeServico fs = new FilmeServico();
+		List<Filme> itens = fs.buscarTodos();
 		request.setAttribute("itens", itens);
 		request.getRequestDispatcher(DESTINO).forward(request, response);
 	}
