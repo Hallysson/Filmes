@@ -9,17 +9,21 @@ import javax.servlet.http.HttpServletRequest;
 import dominio.Artista;
 
 public class Instanciar {
-	
+
 	public static Artista artista(HttpServletRequest request) {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		Artista aux = new Artista();
 		String s;
-		
+
 		s = request.getParameter("codArtista");
 		if (s != null && !s.isEmpty()) {
-			aux.setCodArtista(Integer.parseInt(s));
+			try {
+				aux.setCodArtista(Integer.parseInt(s));
+			} catch (NumberFormatException e) {
+				System.out.println("Instanciacao: codArtista invalido");
+			}
 		}
-		
+
 		s = request.getParameter("nome");
 		if (s != null && !s.isEmpty()) {
 			aux.setNome(s);
@@ -32,7 +36,11 @@ public class Instanciar {
 
 		s = request.getParameter("cache");
 		if (s != null && !s.isEmpty()) {
-			aux.setCache(new BigDecimal(s));
+			try {
+				aux.setCache(new BigDecimal(s));
+			} catch (NumberFormatException e) {
+				System.out.println("Instanciacao: cache invalido");
+			}
 		}
 
 		s = request.getParameter("nascimento");
@@ -40,10 +48,10 @@ public class Instanciar {
 			try {
 				aux.setNascimento(sdf.parse(s));
 			} catch (ParseException e) {
-				e.printStackTrace();
+				System.out.println("Instanciacao: nascimento invalido");
 			}
 		}
 
 		return aux;
-	}	
+	}
 }
