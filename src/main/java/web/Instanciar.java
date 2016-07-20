@@ -7,9 +7,66 @@ import java.text.SimpleDateFormat;
 import javax.servlet.http.HttpServletRequest;
 
 import dominio.Artista;
+import dominio.Participacao;
+import servico.ArtistaServico;
+import servico.FilmeServico;
 
 public class Instanciar {
 
+	public static Participacao participacao(HttpServletRequest request) {
+		
+		ArtistaServico as = new ArtistaServico();
+		FilmeServico fs = new FilmeServico();
+		
+		Participacao aux = new Participacao();
+		String s;
+		
+		s = request.getParameter("codParticipacao");
+		if (s != null && !s.isEmpty()) {
+			try {
+				aux.setCodParticipacao(Integer.parseInt(s));
+			} catch (NumberFormatException e) {
+				System.out.println("Instanciacao: codParticipacao invalido");
+			}
+		}
+
+		s = request.getParameter("personagem");
+		if (s != null && !s.isEmpty()) {
+			aux.setPersonagem(s);
+		}
+
+		s = request.getParameter("desconto");
+		if (s != null && !s.isEmpty()) {
+			try {
+				aux.setDesconto(new BigDecimal(s));
+			} catch (NumberFormatException e) {
+				System.out.println("Instanciacao: desconto invalido");
+			}
+		}
+
+		s = request.getParameter("codArtista");
+		if (s != null && !s.isEmpty()) {
+			try {
+				Artista x = as.buscar(Integer.parseInt(s));
+				aux.setArtista(x);
+			} catch (NumberFormatException e) {
+				System.out.println("Instanciacao: codArtista invalido");
+			}
+		}
+
+		s = request.getParameter("codFilme");
+		if (s != null && !s.isEmpty()) {
+			try {
+				Filme x = fs.buscar(Integer.parseInt(s));
+				aux.setFilme(x);
+			} catch (NumberFormatException e) {
+				System.out.println("Instanciacao: codArtista invalido");
+			}
+		}
+
+		return aux;
+	}
+	
 	public static Artista artista(HttpServletRequest request) {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		Artista aux = new Artista();
